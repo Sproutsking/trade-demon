@@ -1,0 +1,3717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Demon - AI Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></link>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #0e0a0ab7;
+            --accent-brown: #8b6f47;
+            --accent-gold: #d4a574;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #0e0a0ab7;
+            --accent-brown: #8b6f47;
+            --accent-gold: #d4a574;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+               /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-brown);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: black;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                url('data:image/svg+xml,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="blockchain" width="200" height="200" patternUnits="userSpaceOnUse"><rect x="10" y="10" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="75" y="10" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="140" y="10" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="10" y="75" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="75" y="75" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="140" y="75" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="10" y="140" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="75" y="140" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><rect x="140" y="140" width="50" height="50" fill="none" stroke="rgba(139,111,71,0.15)" stroke-width="1"/><line x1="35" y1="60" x2="35" y2="75" stroke="rgba(139,111,71,0.1)" stroke-width="1"/><line x1="100" y1="60" x2="100" y2="75" stroke="rgba(139,111,71,0.1)" stroke-width="1"/><line x1="165" y1="60" x2="165" y2="75" stroke="rgba(139,111,71,0.1)" stroke-width="1"/><line x1="60" y1="100" x2="75" y2="100" stroke="rgba(139,111,71,0.1)" stroke-width="1"/><line x1="125" y1="100" x2="140" y2="100" stroke="rgba(139,111,71,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23blockchain)"/></svg>'),
+                url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.5" fill="rgba(212,165,116,0.08)"/><circle cx="50" cy="50" r="1.5" fill="rgba(212,165,116,0.08)"/><circle cx="90" cy="10" r="1.5" fill="rgba(212,165,116,0.08)"/><circle cx="10" cy="90" r="1.5" fill="rgba(212,165,116,0.08)"/><circle cx="90" cy="90" r="1.5" fill="rgba(212,165,116,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+            z-index: 0;
+            animation: blockchainShift 30s ease-in-out infinite;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(139, 111, 71, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 1000;
+            box-shadow: inset -1px 0 0 rgba(139, 111, 71, 0.3);
+        }
+
+        .logo {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.15) 0%, rgba(212, 165, 116, 0.08) 100%);
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-brown) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 15px 0;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            border: 1px solid #4d3c26;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px 8px;
+            border-radius: 6px;
+            background: linear-gradient(136deg, black, #2c2214, #8b6f47);
+        }
+
+        .nav-item:hover {
+            background: rgba(139, 111, 71, 0.1);
+            color: var(--accent-gold);
+            padding-left: 25px;
+            box-shadow: inset 0 0 10px rgba(139, 111, 71, 0.1);
+        }
+
+        .nav-item.active {
+            background:#030200;
+            color: var(--accent-gold);
+            border-left-color: var(--accent-gold);
+            box-shadow: inset 0 0 15px rgba(139, 111, 71, 0.15);
+        }
+
+        .nav-item i {
+            font-size: 16px;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Headers */
+        .section-header {
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.2) 0%, rgba(212, 165, 116, 0.1) 100%);
+            border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+        }
+
+        .section-header h2 {
+            color: var(--accent-gold);
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-icon-btn {
+            background: rgba(139, 111, 71, 0.15);
+            border: 1px solid rgba(139, 111, 71, 0.3);
+            color: var(--accent-gold);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .header-icon-btn:hover {
+            background: rgba(139, 111, 71, 0.25);
+            border-color: var(--accent-gold);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        /* Market Selector */
+        .market-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .market-btn {
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .market-btn:hover {
+            background: rgba(139, 111, 71, 0.1);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .market-btn.active {
+            background: var(--accent-brown);
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
+        }
+
+        .scan-section {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+        }
+
+        .scan-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        .scan-section p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .scan-btn {
+            width: fit-content;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+
+        .scan-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Compact Row-based Opportunity Cards */
+        .opportunities {
+            display: grid;
+            gap: 12px;
+        }
+
+        .opportunity-card {
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.12) 0%, rgba(212, 165, 116, 0.06) 100%);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .opportunity-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
+            border-color: var(--accent-gold);
+        }
+
+        .opportunity-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(240, 59, 4, 0.15);
+            box-shadow: 0 0 20px rgba(139, 111, 71, 0.3);
+        }
+        .profit-pair-div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .opp-content-details {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+        }
+        .opp-content-detail {
+            flex: 1;
+            display: flex;
+            border-radius: 8px;
+            padding: 10px 5px;
+            background-color: #030200;
+            border: 1px solid #444444;
+            align-items: center;
+            justify-content: center;
+        }
+        .opp-content-detail-label {
+            margin-right: 6px;
+        }
+
+        .profit-badge {
+            padding: 5px 14px;
+            background: var(--success);
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .opp-pair h4 {
+            color: var(--accent-gold);
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        .opp-pair p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .opp-value {
+            text-align: center;
+        }
+
+        .opp-value .label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .opp-value .value {
+            font-size: 13px;
+            margin-left: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .risk-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .risk-low {
+            padding: 8px;
+            border: 1px solid green;
+            background: rgba(16, 185, 129, 0.2); 
+            color: var(--success);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .risk-medium {
+            padding: 8px;
+            border: 1px solid #8b6f47;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .risk-high {
+            padding: 8px;
+            border: 1px solid red;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Panel Overlay */
+        .panel-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+            backdrop-filter: blur(3px);
+        }
+
+        .panel-overlay.active {
+            display: block;
+        }
+
+        /* Side Panels */
+        .side-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 420px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(139, 111, 71, 0.2);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .side-panel.active {
+            right: 0;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.1) 0%, transparent 100%);
+        }
+
+        .panel-header h3 {
+            color: var(--accent-gold);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-close {
+            background: rgba(139, 111, 71, 0.2);
+            border: none;
+            color: var(--accent-gold);
+            cursor: pointer;
+            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .panel-close:hover {
+            background: var(--accent-brown);
+            transform: rotate(90deg);
+        }
+
+        .panel-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .panel-tab:hover {
+            background: rgba(139, 111, 71, 0.1);
+        }
+
+        .panel-tab.active {
+            background: var(--accent-brown);
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .panel-item {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(139, 111, 71, 0.15);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .panel-item:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(3px);
+        }
+
+        .panel-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(139, 111, 71, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+            flex-shrink: 0;
+        }
+
+        .panel-text h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .panel-text p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .panel-text .time {
+            font-size: 10px;
+            color: rgba(176, 176, 176, 0.6);
+            margin-top: 4px;
+        }
+
+        /* Ticket System */
+        .create-ticket-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 8px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .create-ticket-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+        }
+
+        .create-ticket-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .ticket-form {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 26, 0.7);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(139, 111, 71, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .ticket-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(139, 111, 71, 0.15);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .ticket-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(3px);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .ticket-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .ticket-status {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .ticket-status.open {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .ticket-status.closed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .ticket-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .ticket-card:hover .ticket-delete {
+            display: flex;
+        }
+
+        .ticket-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Trades Section */
+        .trades-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-brown);
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+        }
+
+        .trades-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .trade-card {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .trade-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(5px);
+        }
+
+        .trade-info h4 {
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .trade-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .trade-status {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: var(--success); color: white; }
+        .status-completed { background: var(--accent-gold); color: var(--bg-dark); }
+        .status-predicted { background: var(--warning); color: white; }
+
+        /* Account Section */
+        .account-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sub-section {
+            display: none;
+        }
+
+        .sub-section.active {
+            display: block;
+        }
+
+        /* Wallet Section Enhanced */
+        .wallet-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .wallet-tab-btn {
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .wallet-tab-btn:hover {
+            background: rgba(139, 111, 71, 0.08);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .wallet-tab-btn.active {
+            background: var(--accent-brown);
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
+        }
+
+        .wallet-sub-section {
+            display: none;
+        }
+
+        .wallet-sub-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .wallet-card {
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.15) 0%, rgba(212, 165, 116, 0.08) 100%);
+            border: 1px solid rgba(139, 111, 71, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .wallet-card h3 {
+            color: var(--accent-gold);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 26, 0.7);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(139, 111, 71, 0.2);
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 8px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .wallet-balance {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin: 10px 0;
+        }
+
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .wallet-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .wallet-item {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(139, 111, 71, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-item:hover {
+            background: rgba(26, 26, 26, 0.8);
+            border-color: rgba(139, 111, 71, 0.3);
+        }
+
+        .wallet-item h4 {
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .wallet-item p {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .wallet-item-amount {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .exchange-rate {
+            background: rgba(139, 111, 71, 0.1);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exchange-rate .amount {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .exchange-rate .rate {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        @keyframes blockchainShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 1.05; }
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* AI Assistant Section */
+        .chat-container {
+            background:black;
+            border-radius: 12px;
+            height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-brown);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: var(--accent-brown);
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid rgba(139, 111, 71, 0.2);
+            display: flex;
+            gap: 10px;
+            background: var(--bg-secondary);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 20px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+        }
+
+        /* Account Section */
+        .account-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sub-section {
+            display: none;
+        }
+
+        .sub-section.active {
+            display: block;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-hero {
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.2) 0%, rgba(212, 165, 116, 0.1) 100%);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(139, 111, 71, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--accent-gold) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(139, 111, 71, 0.3);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(139, 111, 71, 0.3);
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .detail-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+        }
+
+        .detail-card h4 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.1);
+            font-size: 13px;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Wallet Section */
+        .wallet-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .wallet-tab-btn {
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .wallet-tab-btn:hover {
+            background: rgba(139, 111, 71, 0.08);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .wallet-tab-btn.active {
+            background: var(--accent-brown);
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
+        }
+
+        .wallet-sub-section {
+            display: none;
+        }
+
+        .wallet-sub-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .wallet-card {
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.15) 0%, rgba(212, 165, 116, 0.08) 100%);
+            border: 1px solid rgba(139, 111, 71, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.1);
+        }
+
+        .wallet-card h3 {
+            color: var(--accent-gold);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .wallet-card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .wallet-balance {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--accent-brown) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 8px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .wallet-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .wallet-item {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(139, 111, 71, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-item:hover {
+            background: rgba(26, 26, 26, 0.8);
+            border-color: rgba(139, 111, 71, 0.3);
+            box-shadow: inset 0 0 10px rgba(139, 111, 71, 0.08);
+        }
+
+        .wallet-item h4 {
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .wallet-item p {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .wallet-item-amount {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 26, 0.7);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(139, 111, 71, 0.2);
+            background: rgba(26, 26, 26, 0.9);
+        }
+
+        .exchange-rate {
+            background: rgba(139, 111, 71, 0.1);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exchange-rate .amount {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Asset Section */
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .asset-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(139, 111, 71, 0.5) 0%, rgba(212, 165, 116, 0.5) 100%);
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 111, 71, 0.2);
+            border-color: var(--accent-gold);
+        }
+
+        .asset-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        .asset-name {
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .asset-symbol {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .asset-value {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .asset-usd {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .asset-change {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .asset-change.positive {
+            color: var(--success);
+        }
+
+        .asset-change.negative {
+            color: var(--danger);
+        }
+
+        .settings-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .settings-group {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(139, 111, 71, 0.2);
+        }
+
+        .settings-group h3 {
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .setting-item {
+            padding: 18px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(139, 111, 71, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .setting-item:hover {
+            border-color: var(--accent-gold);
+            transform: translateX(5px);
+        }
+
+        .setting-info h4 {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .setting-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(139, 111, 71, 0.3);
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-switch.active::before {
+            left: 26px;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 20px;
+            color: var(--success);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .input-group {
+            margin: 18px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(139, 111, 71, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0;
+            font-size: 13px;
+        }
+
+        .execute-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .execute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .cancel-btn {
+            background: var(--bg-secondary);
+            margin-top: 10px;
+        }
+
+        .cancel-btn:hover {
+            box-shadow: none;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(139, 111, 71, 0.2);
+            padding: 4px 2%;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottom-nav-items {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            border-radius: 12px;
+            padding: 10px 15px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: 1px solid #2c2214;
+            transition: all 0.2s ease;
+            background: black;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--accent-gold);
+        }
+
+        .bottom-nav-item i {
+            font-size: 18px;
+        }
+
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-bottom: 70px;
+            }
+
+            .section-content {
+                padding: 15px;
+            }
+
+            .bottom-nav {
+                display: block;
+            }
+
+            .trade-card {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .opportunities {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-display {
+                height: 300px;
+            }
+
+            .asset-grid {
+                grid-template-columns: 1fr;
+            }
+            .trade-card {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-gold);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-brown);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        /* Market Carousel */
+        .carousel-wrapper {
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.12) 0%, rgba(212, 165, 116, 0.06) 100%);
+            border: 1px solid rgba(139, 111, 71, 0.2);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            height: 100px;
+        }
+
+        .carousel-track {
+            display: flex;
+            animation: carousel-slide 8s linear infinite;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 111, 71, 0.15), rgba(212, 165, 116, 0.08));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carousel-text h4 {
+            color: var(--accent-gold);
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .carousel-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .carousel-badge {
+            background: var(--success);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        /* Keyframes for slide animation */
+.carousel-track {
+    display: flex;
+    animation: carousel-slide 9s ease-in-out infinite;
+}
+
+/* Smooth slide + pause between each slide */
+@keyframes carousel-slide {
+    0%, 20%   { transform: translateX(0); }         /* Slide 1 */
+    25%, 45%  { transform: translateX(-100%); }     /* Slide 2 */
+    50%, 70%  { transform: translateX(-200%); }     /* Slide 3 */
+    75%, 100% { transform: translateX(0); }         /* Back to 1 */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>TRADE DEMON</h1>
+                <span>AI Platform</span>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-item active" data-section="trading">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Trading</span>
+                </div>
+                <div class="nav-item" data-section="charts">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Live Charts</span>
+                </div>
+                <div class="nav-item" data-section="assistant">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Assistant</span>
+                </div>
+                <div class="nav-item" data-section="trades">
+                    <i class="fas fa-history"></i>
+                    <span>My Trades</span>
+                </div>
+                <div class="nav-item" data-section="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Trading Section -->
+            <div class="content-section active" id="trading">
+                <div class="section-header">
+                    <h2><i class="fas fa-bolt"></i> Trade Analysis</h2>
+                    <div class="header-controls">
+                        <button class="header-icon-btn" onclick="openPanel('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-icon-btn" onclick="openPanel('support')">
+                            <i class="fas fa-headset"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <!-- Carousel -->
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-item">
+                                <div class="carousel-text">
+                                    <h4>🚀 BTC Rally Incoming</h4>
+                                    <p>Technical analysis shows strong bullish signals</p>
+                                </div>
+                                <div class="carousel-badge">+5.2%</div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="carousel-text">
+                                    <h4>📈 ETH Consolidating</h4>
+                                    <p>Watch for breakout in next 2 hours</p>
+                                </div>
+                                <div class="carousel-badge">+3.1%</div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="carousel-text">
+                                    <h4>💱 Forex Opportunities</h4>
+                                    <p>EUR/USD showing reversal patterns</p>
+                                </div>
+                                <div class="carousel-badge">+2.8%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="market-selector">
+                        <button class="market-btn active" data-market="crypto">
+                            <i class="fab fa-bitcoin"></i> Crypto
+                        </button>
+                        <button class="market-btn" data-market="forex">
+                            <i class="fas fa-dollar-sign"></i> Forex
+                        </button>
+                    </div>
+
+                    <div class="scan-section">
+                        <h3>15-Minute Market Scan</h3>
+                        <p>Trade Demon will analyze the market and provide 3 optimized opportunities with varying risk-reward ratios.</p>
+                        <button class="scan-btn" id="scanBtn">
+                            <i class="fas fa-search"></i> Start Market Scan
+                        </button>
+                    </div>
+
+                    <div class="opportunities" id="opportunities"></div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="content-section" id="charts">
+                 <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Account Management</h2>
+                    <div class="header-controls">
+                        <button class="header-icon-btn" onclick="openPanel('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-icon-btn" onclick="openPanel('support')">
+                            <i class="fas fa-headset"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="chart-container">
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-timeframe="1m">1M</button>
+                            <button class="chart-btn" data-timeframe="5m">5M</button>
+                            <button class="chart-btn" data-timeframe="15m">15M</button>
+                            <button class="chart-btn" data-timeframe="1h">1H</button>
+                            <button class="chart-btn" data-timeframe="4h">4H</button>
+                            <button class="chart-btn" data-timeframe="1d">1D</button>
+                        </div>
+                        <div class="chart-display">
+                            <canvas id="tradingChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3 style="margin-bottom: 15px; color: var(--accent-gold);">Market Overview</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 111, 71, 0.2);">
+                                <p style="color: var(--text-secondary); font-size: 12px;">BTC/USD</p>
+                                <h3 style="color: var(--success); margin: 8px 0;">$64,250.00</h3>
+                                <p style="color: var(--success); font-size: 13px;">+3.24%</p>
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 111, 71, 0.2);">
+                                <p style="color: var(--text-secondary); font-size: 12px;">ETH/USD</p>
+                                <h3 style="color: var(--success); margin: 8px 0;">$3,125.50</h3>
+                                <p style="color: var(--success); font-size: 13px;">+2.15%</p>
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 111, 71, 0.2);">
+                                <p style="color: var(--text-secondary); font-size: 12px;">EUR/USD</p>
+                                <h3 style="color: var(--danger); margin: 8px 0;">1.0875</h3>
+                                <p style="color: var(--danger); font-size: 13px;">-0.45%</p>
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 111, 71, 0.2);">
+                                <p style="color: var(--text-secondary); font-size: 12px;">GBP/USD</p>
+                                <h3 style="color: var(--success); margin: 8px 0;">1.2634</h3>
+                                <p style="color: var(--success); font-size: 13px;">+0.78%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Section -->
+            <div class="content-section" id="assistant">
+                <div class="section-header">
+                    <h2><i class="fas fa-robot"></i> AI Trading Assistant</h2>
+                    <div class="header-controls">
+                        <button class="header-icon-btn" onclick="openPanel('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-icon-btn" onclick="openPanel('support')">
+                            <i class="fas fa-headset"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message">
+                                <div class="message-avatar">TD</div>
+                                <div class="message-content">
+                                    Hello! I'm Trade Demon, your AI trading assistant. Ask me anything about trading strategies, market analysis, or risk management!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <button class="chat-input-btn attach-btn" onclick="document.getElementById('chatFileInput').click()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <input type="file" id="chatFileInput" style="display: none;" multiple>
+                            <input type="text" id="chatInput" placeholder="Ask me anything...">
+                            <button class="chat-input-btn" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trades Section -->
+            <div class="content-section" id="trades">
+                 <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Account Management</h2>
+                    <div class="header-controls">
+                        <button class="header-icon-btn" onclick="openPanel('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-icon-btn" onclick="openPanel('support')">
+                            <i class="fas fa-headset"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="trades-tabs">
+                        <button class="tab-btn active" data-tab="past">Past Trades</button>
+                        <button class="tab-btn" data-tab="predicted">Future Predictions</button>
+                    </div>
+                    <div class="trades-grid" id="tradesGrid"></div>
+                </div>
+            </div>
+
+            <!-- Account Section -->
+            <div class="content-section" id="account">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Account Management</h2>
+                    <div class="header-controls">
+                        <button class="header-icon-btn" onclick="openPanel('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="header-icon-btn" onclick="openPanel('support')">
+                            <i class="fas fa-headset"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="account-tabs">
+                        <button class="tab-btn active" data-account-tab="profile">Profile</button>
+                        <button class="tab-btn" data-account-tab="wallet">Wallet</button>
+                        <button class="tab-btn" data-account-tab="assets">Assets</button>
+                        <button class="tab-btn" data-account-tab="settings">Settings</button>
+                    </div>
+
+                    <!-- Profile Sub-section -->
+                    <div class="sub-section active" id="profile">
+                        <div class="profile-container">
+                            <div class="profile-hero">
+                                <div class="profile-avatar-large">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="profile-name">John Trader</div>
+                                <div class="profile-email">john.trader@tradedemon.com</div>
+                                <div style="display: inline-block; padding: 8px 20px; background: rgba(139, 111, 71, 0.3); border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid var(--accent-gold);">
+                                    <i class="fas fa-shield-alt"></i> Premium Member
+                                </div>
+                                <div class="profile-stats">
+                                    <div class="stat-card">
+                                        <div class="stat-label">Balance</div>
+                                        <div class="stat-value">$50,000</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-label">Total Profit</div>
+                                        <div class="stat-value" style="color: var(--success);">+$12,450</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-label">ROI</div>
+                                        <div class="stat-value" style="color: var(--success);">+24.9%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-details">
+                                <div class="detail-card">
+                                    <h4><i class="fas fa-info-circle"></i> Account Information</h4>
+                                    <div class="detail-item">
+                                        <span class="detail-label">User ID</span>
+                                        <span class="detail-value">#TD-892451</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Member Since</span>
+                                        <span class="detail-value">January 2024</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Account Type</span>
+                                        <span class="detail-value">Premium</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Verification</span>
+                                        <span class="detail-value" style="color: var(--success);"><i class="fas fa-check-circle"></i> Verified</span>
+                                    </div>
+                                </div>
+
+                                <div class="detail-card">
+                                    <h4><i class="fas fa-chart-line"></i> Trading Statistics</h4>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Total Trades</span>
+                                        <span class="detail-value">247</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Success Rate</span>
+                                        <span class="detail-value" style="color: var(--success);">78.5%</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Active Trades</span>
+                                        <span class="detail-value">5</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Best Trade</span>
+                                        <span class="detail-value" style="color: var(--success);">+$2,450</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Sub-section -->
+                    <div class="sub-section" id="wallet">
+                        <div class="wallet-tabs">
+                            <button class="wallet-tab-btn active" data-wallet-tab="deposit">
+                                <i class="fas fa-download"></i> Deposit
+                            </button>
+                            <button class="wallet-tab-btn" data-wallet-tab="withdraw">
+                                <i class="fas fa-upload"></i> Withdraw
+                            </button>
+                            <button class="wallet-tab-btn" data-wallet-tab="transfer">
+                                <i class="fas fa-exchange-alt"></i> Transfer
+                            </button>
+                            <button class="wallet-tab-btn" data-wallet-tab="convert">
+                                <i class="fas fa-random"></i> Convert
+                            </button>
+                            <button class="wallet-tab-btn" data-wallet-tab="external">
+                                <i class="fas fa-link"></i> External
+                            </button>
+                        </div>
+
+                        <!-- Deposit Section -->
+                        <div class="wallet-sub-section active" id="deposit-section">
+                            <div class="wallet-card">
+                                <h3><i class="fas fa-arrow-down"></i> Deposit Funds</h3>
+                                <form onsubmit="handleDeposit(event)">
+                                    <div class="form-group">
+                                        <label>Select Payment Method</label>
+                                        <select required>
+                                            <option>Bank Transfer (Wire)</option>
+                                            <option>Credit/Debit Card</option>
+                                            <option>Cryptocurrency Direct</option>
+                                            <option>E-wallet</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Deposit Amount</label>
+                                        <input type="number" placeholder="Enter amount" min="10" step="0.01" required>
+                                    </div>
+                                    <div class="exchange-rate">
+                                        <span>You will receive:</span>
+                                        <span class="amount">$0.00</span>
+                                    </div>
+                                    <button class="action-btn" type="submit" style="width: 100%;">
+                                        <i class="fas fa-bolt"></i> Proceed
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="wallet-card">
+                                <h3>Recent Deposits</h3>
+                                <div class="wallet-list">
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>Bank Transfer</h4>
+                                            <p>Oct 13, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">+$5,000</div>
+                                    </div>
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>Crypto Deposit</h4>
+                                            <p>Oct 10, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">+2.5 BTC</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Withdraw Section -->
+                        <div class="wallet-sub-section" id="withdraw-section">
+                            <div class="wallet-card">
+                                <h3><i class="fas fa-arrow-up"></i> Withdraw Funds</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 13px;">Available Balance: <span style="color: var(--accent-gold);">$50,000</span></p>
+                                <form onsubmit="handleWithdraw(event)">
+                                    <div class="form-group">
+                                        <label>Withdrawal Method</label>
+                                        <select required>
+                                            <option>Bank Account</option>
+                                            <option>Cryptocurrency Address</option>
+                                            <option>E-wallet</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Recipient Address/Account</label>
+                                        <input type="text" placeholder="Enter destination" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Withdrawal Amount</label>
+                                        <input type="number" placeholder="Enter amount" min="50" step="0.01" required>
+                                    </div>
+                                    <div class="exchange-rate">
+                                        <span>Processing Fee:</span>
+                                        <span class="amount">$2.50</span>
+                                    </div>
+                                    <button class="action-btn" type="submit" style="width: 100%;">
+                                        <i class="fas fa-bolt"></i> Submit
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="wallet-card">
+                                <h3>Withdrawal History</h3>
+                                <div class="wallet-list">
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>Bank Transfer</h4>
+                                            <p>Oct 8, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">-$2,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transfer Section -->
+                        <div class="wallet-sub-section" id="transfer-section">
+                            <div class="wallet-card">
+                                <h3><i class="fas fa-exchange-alt"></i> Internal Transfer</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 13px;">Transfer between your accounts</p>
+                                <form onsubmit="handleTransfer(event)">
+                                    <div class="form-group">
+                                        <label>From Account</label>
+                                        <select required>
+                                            <option>Free Account ($25,000)</option>
+                                            <option>Trading Account ($50,000)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>To Account</label>
+                                        <select required>
+                                            <option>Trading Account</option>
+                                            <option>Free Account</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Transfer Amount</label>
+                                        <input type="number" placeholder="Enter amount" step="0.01" required>
+                                    </div>
+                                    <button class="action-btn" type="submit" style="width: 100%;">
+                                        <i class="fas fa-bolt"></i> Execute
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="wallet-card">
+                                <h3>Transfer Limits</h3>
+                                <div class="wallet-list">
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>Daily Limit</h4>
+                                            <p>Per transaction</p>
+                                        </div>
+                                        <div class="wallet-item-amount">$100,000</div>
+                                    </div>
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>Monthly Limit</h4>
+                                            <p>Cumulative</p>
+                                        </div>
+                                        <div class="wallet-item-amount">$500,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Convert Section -->
+                        <div class="wallet-sub-section" id="convert-section">
+                            <div class="wallet-card">
+                                <h3><i class="fas fa-exchange-alt"></i> Asset Conversion</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 13px;">Convert between different assets and currencies</p>
+                                <form onsubmit="handleConvert(event)">
+                                    <div class="form-group">
+                                        <label>Convert From</label>
+                                        <select id="convertFrom" required>
+                                            <option>USD - US Dollar</option>
+                                            <option>EUR - Euro</option>
+                                            <option>BTC - Bitcoin</option>
+                                            <option>ETH - Ethereum</option>
+                                            <option>GBP - British Pound</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Amount</label>
+                                        <input type="number" id="convertAmount" placeholder="Enter amount" step="0.0001" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Convert To</label>
+                                        <select id="convertTo" required>
+                                            <option>BTC - Bitcoin</option>
+                                            <option>ETH - Ethereum</option>
+                                            <option>USD - US Dollar</option>
+                                            <option>EUR - Euro</option>
+                                            <option>GBP - British Pound</option>
+                                        </select>
+                                    </div>
+                                    <div class="exchange-rate">
+                                        <span>Exchange Rate:</span>
+                                        <span class="amount" id="exchangeRate">1.0000</span>
+                                    </div>
+                                    <div class="exchange-rate">
+                                        <span>You'll Receive:</span>
+                                        <span class="amount" id="convertResult">0.0000</span>
+                                    </div>
+                                    <button class="action-btn" type="submit" style="width: 100%;">
+                                        <i class="fas fa-bolt"></i> Convert
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="wallet-card">
+                                <h3>Conversion History</h3>
+                                <div class="wallet-list">
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>BTC → USD</h4>
+                                            <p>Oct 12, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">1.5 BTC → $96,375</div>
+                                    </div>
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>ETH → USD</h4>
+                                            <p>Oct 10, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">5 ETH → $15,627.50</div>
+                                    </div>
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4>USD → BTC</h4>
+                                            <p>Oct 8, 2025</p>
+                                        </div>
+                                        <div class="wallet-item-amount">$10,000 → 0.155 BTC</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- External Wallets Section -->
+                        <div class="wallet-sub-section" id="external-section">
+                            <div class="wallet-card">
+                                <h3><i class="fas fa-link"></i> Connect External Wallet</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 13px;">Link your external blockchain wallets for direct transfers</p>
+                                <form onsubmit="handleAddWallet(event)">
+                                    <div class="form-group">
+                                        <label>Wallet Type</label>
+                                        <select required>
+                                            <option>MetaMask</option>
+                                            <option>Trust Wallet</option>
+                                            <option>Ledger</option>
+                                            <option>Trezor</option>
+                                            <option>Coinbase Wallet</option>
+                                            <option>Manual Address</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Wallet Name (Display)</label>
+                                        <input type="text" placeholder="e.g., My MetaMask" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Wallet Address</label>
+                                        <input type="text" placeholder="0x..." required>
+                                    </div>
+                                    <button class="action-btn" type="submit" style="width: 100%;">
+                                        <i class="fas fa-bolt"></i> Connect
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="wallet-card">
+                                <h3>Connected Wallets</h3>
+                                <div class="wallet-list">
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4><i class="fas fa-wallet"></i> My MetaMask</h4>
+                                            <p>0x742d3...d2b1a • Ethereum</p>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="action-btn" style="padding: 8px 12px; font-size: 11px;">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="action-btn" style="padding: 8px 12px; font-size: 11px; background: rgba(239, 68, 68, 0.5);">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="wallet-item">
+                                        <div>
+                                            <h4><i class="fas fa-wallet"></i> Trust Wallet</h4>
+                                            <p>0x3f4E...8c2d9 • BSC</p>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="action-btn" style="padding: 8px 12px; font-size: 11px;">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="action-btn" style="padding: 8px 12px; font-size: 11px; background: rgba(239, 68, 68, 0.5);">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assets Sub-section -->
+                    <div class="sub-section" id="assets">
+                        <div class="wallet-card">
+                            <h3><i class="fas fa-cubes"></i> Portfolio Summary</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 15px;">
+                                <div style="background: rgba(139, 111, 71, 0.15); border: 1px solid rgba(139, 111, 71, 0.25); border-radius: 10px; padding: 15px; text-align: center;">
+                                    <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 8px;">Total Value</p>
+                                    <h4 style="color: var(--accent-gold); font-size: 20px; font-weight: 900;">$50,000</h4>
+                                </div>
+                                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; padding: 15px; text-align: center;">
+                                    <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 8px;">Total Profit</p>
+                                    <h4 style="color: var(--success); font-size: 20px; font-weight: 900;">+$12,450</h4>
+                                </div>
+                                <div style="background: rgba(139, 111, 71, 0.1); border: 1px solid rgba(139, 111, 71, 0.2); border-radius: 10px; padding: 15px; text-align: center;">
+                                    <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 8px;">ROI</p>
+                                    <h4 style="color: var(--accent-gold); font-size: 20px; font-weight: 900;">+24.9%</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 style="color: var(--accent-gold); font-size: 16px; margin: 25px 0 15px 0;"><i class="fas fa-coins"></i> Your Assets</h3>
+                        <div class="asset-grid">
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fab fa-bitcoin"></i>
+                                </div>
+                                <div class="asset-name">Bitcoin</div>
+                                <div class="asset-symbol">BTC</div>
+                                <div class="asset-value">2.5 BTC</div>
+                                <div class="asset-usd">$160,625</div>
+                                <div class="asset-change positive">
+                                    <i class="fas fa-arrow-up"></i> +5.32%
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fab fa-ethereum"></i>
+                                </div>
+                                <div class="asset-name">Ethereum</div>
+                                <div class="asset-symbol">ETH</div>
+                                <div class="asset-value">15 ETH</div>
+                                <div class="asset-usd">$46,875</div>
+                                <div class="asset-change positive">
+                                    <i class="fas fa-arrow-up"></i> +3.15%
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="asset-name">US Dollar</div>
+                                <div class="asset-symbol">USD</div>
+                                <div class="asset-value">$50,000</div>
+                                <div class="asset-usd">Cash</div>
+                                <div class="asset-change" style="color: var(--text-secondary);">
+                                    <span>Stable</span>
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="asset-name">Solana</div>
+                                <div class="asset-symbol">SOL</div>
+                                <div class="asset-value">50 SOL</div>
+                                <div class="asset-usd">$7,500</div>
+                                <div class="asset-change positive">
+                                    <i class="fas fa-arrow-up"></i> +8.45%
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fas fa-ring"></i>
+                                </div>
+                                <div class="asset-name">Polkadot</div>
+                                <div class="asset-symbol">DOT</div>
+                                <div class="asset-value">200 DOT</div>
+                                <div class="asset-usd">$4,400</div>
+                                <div class="asset-change negative">
+                                    <i class="fas fa-arrow-down"></i> -2.10%
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="asset-card">
+                                <div class="asset-icon">
+                                    <i class="fas fa-link"></i>
+                                </div>
+                                <div class="asset-name">Chainlink</div>
+                                <div class="asset-symbol">LINK</div>
+                                <div class="asset-value">500 LINK</div>
+                                <div class="asset-usd">$6,250</div>
+                                <div class="asset-change positive">
+                                    <i class="fas fa-arrow-up"></i> +1.89%
+                                </div>
+                                <div class="wallet-actions" style="margin-top: 12px;">
+                                    <button class="action-btn" style="padding: 8px 12px; font-size: 11px; width: 100%;">
+                                        <i class="fas fa-exchange-alt"></i> Trade
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Sub-section -->
+                    <div class="sub-section" id="settings">
+                        <div class="settings-container">
+                            <div class="settings-group">
+                                <h3><i class="fas fa-shield-alt"></i> Security Settings</h3>
+                                <div class="security-badge">
+                                    <i class="fas fa-check-circle"></i> Your account is secure
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Two-Factor Authentication (2FA)</h4>
+                                            <p>Add an extra layer of security with 2FA</p>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Biometric Authentication</h4>
+                                            <p>Use fingerprint or face recognition</p>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Login Alerts</h4>
+                                            <p>Get notified of new login attempts</p>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Session Timeout</h4>
+                                            <p>Auto logout after 30 minutes of inactivity</p>
+                                        </div>
+                                        <div class="toggle-switch active"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3><i class="fas fa-bell"></i> Notification Settings</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Email Notifications</h4>
+                                        <p>Receive trade alerts via email</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Push Notifications</h4>
+                                        <p>Real-time alerts on your device</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Price Alerts</h4>
+                                        <p>Get notified when prices hit your targets</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Market Updates</h4>
+                                        <p>Daily market analysis and insights</p>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3><i class="fas fa-cog"></i> Trading Settings</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Auto-Trading Mode</h4>
+                                        <p>Let Trade Demon execute trades automatically</p>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Risk Management</h4>
+                                        <p>Automatic stop-loss and take-profit</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Smart Order Routing</h4>
+                                        <p>Optimize execution across exchanges</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Advanced Charting</h4>
+                                        <p>Enable professional trading tools</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h3><i class="fas fa-palette"></i> Display Settings</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Dark Mode</h4>
+                                        <p>Currently enabled</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Compact View</h4>
+                                        <p>Show more data on screen</p>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Animations</h4>
+                                        <p>Enable smooth transitions</p>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Overlay -->
+        <div class="panel-overlay" onclick="closePanels()"></div>
+
+        <!-- Notifications Panel -->
+        <div class="side-panel" id="notificationPanel">
+            <div class="panel-header">
+                <h3>Notifications</h3>
+                <button class="panel-close" onclick="closePanels()">×</button>
+            </div>
+            <div class="panel-tabs">
+                <button class="panel-tab active" onclick="switchNotifTab('alerts')">Alerts</button>
+                <button class="panel-tab" onclick="switchNotifTab('news')">News</button>
+            </div>
+            <div class="panel-content" id="alertsTab"></div>
+            <div class="panel-content" id="newsTab" style="display: none;"></div>
+        </div>
+
+        <!-- Support Panel -->
+        <div class="side-panel" id="supportPanel">
+            <div class="panel-header">
+                <h3>Support</h3>
+                <button class="panel-close" onclick="closePanels()">×</button>
+            </div>
+            <div class="panel-tabs">
+                <button class="panel-tab active" onclick="switchSupportTab('chat')">Live Chat</button>
+                <button class="panel-tab" onclick="switchSupportTab('tickets')">Tickets</button>
+            </div>
+            
+            <!-- Live Chat Tab -->
+            <div class="panel-content" id="chatTab">
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); border-radius: 6px; padding: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--success);">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></div>
+                    Agent Online
+                </div>
+                <div id="supportChat" style="background: var(--bg-secondary); border-radius: 6px; height: 300px; overflow-y: auto; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(139, 111, 71, 0.2);">
+                    <div class="message">
+                        <div class="message-avatar">TD</div>
+                        <div class="message-content" style="max-width: 100%;">Hi! How can we help you today?</div>
+                    </div>
+                </div>
+                <div class="chat-input" style="padding: 0; background: transparent;">
+                    <button class="chat-input-btn attach-btn" onclick="document.getElementById('supportFileInput').click()">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <input type="file" id="supportFileInput" style="display: none;" multiple>
+                    <input type="text" id="supportInput" placeholder="Type message..." style="border-radius: 8px;">
+                    <button class="chat-input-btn" onclick="sendSupportMsg()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tickets Tab -->
+            <div class="panel-content" id="ticketsTab" style="display: none;">
+                <div id="ticketsList">
+                    <button class="create-ticket-btn" id="createTicketBtn" onclick="showCreateTicket()">
+                        <i class="fas fa-plus"></i> Create New Ticket
+                    </button>
+                    
+                    <div id="createTicketForm" style="display: none;">
+                        <button class="back-btn" onclick="hideCreateTicket()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <div class="ticket-form">
+                            <input type="text" class="form-input" id="ticketSubject" placeholder="Subject" required>
+                            <textarea class="form-input form-textarea" id="ticketMessage" placeholder="Describe your issue..." required></textarea>
+                            <select class="form-input" id="ticketPriority">
+                                <option>Low Priority</option>
+                                <option selected>Normal Priority</option>
+                                <option>High Priority</option>
+                                <option>Urgent</option>
+                            </select>
+                        </div>
+                        <button class="create-ticket-btn" onclick="submitTicket()">
+                            <i class="fas fa-check"></i> Submit Ticket
+                        </button>
+                    </div>
+
+                    <div id="ticketsListView">
+                        <h4 style="color: var(--accent-gold); font-size: 13px; margin-bottom: 12px;">Your Tickets</h4>
+                        <div class="ticket-list" id="ticketCards"></div>
+                    </div>
+                </div>
+
+                <div id="ticketView" class="ticket-view">
+                    <button class="back-btn" onclick="closeTicketView()">
+                        <i class="fas fa-arrow-left"></i> Back to Tickets
+                    </button>
+                    <div id="ticketViewContent"></div>
+                    <div id="ticketChatMessages" style="background: var(--bg-secondary); border-radius: 6px; height: 250px; overflow-y: auto; padding: 12px; margin: 15px 0; border: 1px solid rgba(139, 111, 71, 0.2);"></div>
+                    <div class="chat-input" style="padding: 0; background: transparent;">
+                        <button class="chat-input-btn attach-btn" onclick="document.getElementById('ticketFileInput').click()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <input type="file" id="ticketFileInput" style="display: none;" multiple>
+                        <input type="text" id="ticketReplyInput" placeholder="Type reply...">
+                        <button class="chat-input-btn" onclick="sendTicketReply()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <div class="bottom-nav-items">
+                <div class="bottom-nav-item active" data-section="trading">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Trading</span>
+                </div>
+                <div class="bottom-nav-item" data-section="charts">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Charts</span>
+                </div>
+                <div class="bottom-nav-item" data-section="assistant">
+                    <i class="fas fa-robot"></i>
+                    <span>Assistant</span>
+                </div>
+                <div class="bottom-nav-item" data-section="trades">
+                    <i class="fas fa-history"></i>
+                    <span>Trades</span>
+                </div>
+                <div class="bottom-nav-item" data-section="account">
+                    <i class="fas fa-user"></i>
+                    <span>Account</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div class="modal" id="tradeModal">
+        <div class="modal-content">
+            <h2>Execute Trade</h2>
+            <div id="modalDetails"></div>
+            <div class="input-group">
+                <label>Investment Amount ($)</label>
+                <input type="number" id="tradeAmount" placeholder="Enter amount" min="10">
+            </div>
+            <div class="terms-checkbox">
+                <input type="checkbox" id="termsCheck">
+                <label for="termsCheck">I agree to the trading terms and risk disclosure</label>
+            </div>
+            <button class="execute-btn" id="executeBtn">Execute Trade</button>
+            <button class="execute-btn cancel-btn" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        const state = {
+            currentSection: 'trading',
+            currentMarket: 'crypto',
+            currentTab: 'past',
+            currentAccountTab: 'profile',
+            currentWalletTab: 'overview',
+            currentPanel: null,
+            selectedOpportunity: null,
+            currentTicket: null,
+            tickets: [
+                { id: '#TK-2501', status: 'open', subject: 'Withdrawal pending', message: 'My withdrawal has been pending for 2 days', date: 'Today', replies: [] },
+                { id: '#TK-2498', status: 'closed', subject: 'Account verification', message: 'Need help with verification', date: 'Oct 12', replies: [] }
+            ],
+            trades: [
+                { id: 1, type: 'BTC/USD', amount: 1000, profit: 150, status: 'completed', date: '2025-10-12' },
+                { id: 2, type: 'ETH/USD', amount: 500, profit: 75, status: 'active', date: '2025-10-14' },
+                { id: 3, type: 'SOL/USD', amount: 750, profit: 112, status: 'completed', date: '2025-10-10' }
+            ],
+            predictedTrades: [
+                { id: 4, type: 'BTC/USD', predictedProfit: 12.5, confidence: 85, date: '2025-10-15' },
+                { id: 5, type: 'EUR/USD', predictedProfit: 8.3, confidence: 78, date: '2025-10-16' },
+                { id: 6, type: 'ETH/USD', predictedProfit: 15.7, confidence: 82, date: '2025-10-17' }
+            ],
+            notifications: [
+                { type: 'trade', icon: 'fa-chart-line', title: 'Trade Executed', text: 'Your BTC/USD trade executed', time: '2 min ago' },
+                { type: 'alert', icon: 'fa-bell', title: 'Price Alert', text: 'ETH reached $3,200', time: '15 min ago' },
+                { type: 'system', icon: 'fa-info-circle', title: 'System', text: 'New features available', time: '1 hour ago' }
+            ],
+            newsItems: [
+                { title: 'Bitcoin Breaks $65,000', text: 'Strong bullish momentum continues', time: '30 min ago' },
+                { title: 'Ethereum Upgrade', text: 'Network efficiency improvements', time: '2 hours ago' }
+            ]
+        };
+
+        // Navigation
+        function initNavigation() {
+            document.querySelectorAll('.nav-item, .bottom-nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const section = item.dataset.section;
+                    switchSection(section);
+                });
+            });
+        }
+
+        function switchSection(section) {
+            state.currentSection = section;
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            document.querySelectorAll('.nav-item, .bottom-nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === section);
+            });
+        }
+
+        // Account Tabs
+        document.querySelectorAll('[data-account-tab]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.accountTab;
+                state.currentAccountTab = tab;
+                document.querySelectorAll('[data-account-tab]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.sub-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+
+        // Wallet Tab Navigation
+        document.querySelectorAll('.wallet-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.walletTab;
+                document.querySelectorAll('.wallet-tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.wallet-sub-section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(tabName + '-section').classList.add('active');
+                state.currentWalletTab = tabName;
+            });
+        });
+
+        // Market Selection
+        document.querySelectorAll('.market-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.currentMarket = btn.dataset.market;
+            });
+        });
+
+        // Chart Timeframe Selection
+        document.querySelectorAll('.chart-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateChart(btn.dataset.timeframe);
+            });
+        });
+
+        // Trading Chart
+        let tradingChart = null;
+        function initChart() {
+            const ctx = document.getElementById('tradingChart');
+            if (!ctx) return;
+
+            const data = generateChartData(50);
+            tradingChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Price',
+                        data: data.prices,
+                        borderColor: '#d4a574',
+                        backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#d4a574'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                            titleColor: '#d4a574',
+                            bodyColor: '#ffffff',
+                            borderColor: '#8b6f47',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            grid: { color: 'rgba(139, 111, 71, 0.1)' },
+                            ticks: { color: '#b0b0b0', font: { size: 11 } }
+                        },
+                        y: {
+                            display: true,
+                            grid: { color: 'rgba(139, 111, 71, 0.1)' },
+                            ticks: { color: '#b0b0b0', font: { size: 11 } }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+
+        function generateChartData(points) {
+            const labels = [];
+            const prices = [];
+            let basePrice = 64250;
+            
+            for (let i = 0; i < points; i++) {
+                labels.push(i.toString());
+                basePrice += (Math.random() - 0.5) * 500;
+                prices.push(basePrice);
+            }
+            
+            return { labels, prices };
+        }
+
+        function updateChart(timeframe) {
+            if (!tradingChart) return;
+            const points = { '1m': 60, '5m': 50, '15m': 40, '1h': 30, '4h': 25, '1d': 20 }[timeframe] || 50;
+            const data = generateChartData(points);
+            tradingChart.data.labels = data.labels;
+            tradingChart.data.datasets[0].data = data.prices;
+            tradingChart.update();
+        }
+
+        // Market Scan
+        const scanBtn = document.getElementById('scanBtn');
+        const opportunitiesContainer = document.getElementById('opportunities');
+
+        scanBtn.addEventListener('click', async () => {
+            scanBtn.disabled = true;
+            scanBtn.innerHTML = '<span class="loading"></span> Scanning Market...';
+            opportunitiesContainer.innerHTML = '';
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            const opportunities = generateOpportunities();
+            displayOpportunities(opportunities);
+
+            scanBtn.disabled = false;
+            scanBtn.innerHTML = '<i class="fas fa-check"></i> Scan Complete';
+            setTimeout(() => {
+                scanBtn.innerHTML = '<i class="fas fa-search"></i> Start Market Scan';
+            }, 2000);
+        });
+
+        function generateOpportunities() {
+            const opportunities = [
+                {
+                    id: 1,
+                    pair: state.currentMarket === 'crypto' ? 'BTC/USD' : 'EUR/USD',
+                    profit: state.currentMarket === 'crypto' ? 12.5 : 8.3,
+                    risk: 'low',
+                    entry: state.currentMarket === 'crypto' ? '64,250' : '1.0875',
+                    target: state.currentMarket === 'crypto' ? '72,300' : '1.1765',
+                    stopLoss: state.currentMarket === 'crypto' ? '61,000' : '1.0650'
+                },
+                {
+                    id: 2,
+                    pair: state.currentMarket === 'crypto' ? 'ETH/USD' : 'GBP/USD',
+                    profit: state.currentMarket === 'crypto' ? 18.7 : 11.2,
+                    risk: 'medium',
+                    entry: state.currentMarket === 'crypto' ? '3,125' : '1.2634',
+                    target: state.currentMarket === 'crypto' ? '3,710' : '1.4050',
+                    stopLoss: state.currentMarket === 'crypto' ? '2,950' : '1.2200'
+                },
+                {
+                    id: 3,
+                    pair: state.currentMarket === 'crypto' ? 'SOL/USD' : 'USD/JPY',
+                    profit: state.currentMarket === 'crypto' ? 25.3 : 15.8,
+                    risk: 'high',
+                    entry: state.currentMarket === 'crypto' ? '150' : '149.50',
+                    target: state.currentMarket === 'crypto' ? '188' : '173.00',
+                    stopLoss: state.currentMarket === 'crypto' ? '138' : '142.00'
+                }
+            ];
+            return opportunities;
+        }
+
+        function displayOpportunities(opportunities) {
+            opportunitiesContainer.innerHTML = opportunities.map(opp => `
+                <div class="opportunity-card" data-id="${opp.id}">
+                    <div class="profit-pair-div">
+                        <div class="profit-badge">+${opp.profit}%</div>
+                        <h4>${opp.pair}</h4>
+                    </div>
+                    <div class="opp-content-details" style="margin: 10px 0; font-size: 13px; color: var(--text-secondary);">
+                        <p class="opp-content-detail"><strong class="opp-content-detail-label">Entry:</strong> ${opp.entry}</p>
+                        <p class="opp-content-detail"><strong class="opp-content-detail-label">Target:</strong> ${opp.target}</p>
+                        <p class="opp-content-detail"><strong class="opp-content-detail-label">Stop Loss:</strong> ${opp.stopLoss}</p>
+                    </div>
+                    <div class="risk-meter risk-${opp.risk}">
+                        <span>${opp.risk} Risk</span>
+                        <div class="risk-bar">
+                            <div class="risk-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.opportunity-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.opportunity-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    const id = parseInt(card.dataset.id);
+                    state.selectedOpportunity = opportunities.find(o => o.id === id);
+                    openTradeModal(state.selectedOpportunity);
+                });
+            });
+        }
+
+        // Trade Modal
+        const tradeModal = document.getElementById('tradeModal');
+        const modalDetails = document.getElementById('modalDetails');
+        const executeBtn = document.getElementById('executeBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        function openTradeModal(opportunity) {
+            modalDetails.innerHTML = `
+                <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;">${opportunity.pair}</h3>
+                    <p style="color: var(--text-secondary); font-size: 13px; margin: 5px 0;">Expected Profit: <span style="color: var(--success); font-weight: 700;">+${opportunity.profit}%</span></p>
+                    <p style="color: var(--text-secondary); font-size: 13px; margin: 5px 0;">Entry: ${opportunity.entry}</p>
+                    <p style="color: var(--text-secondary); font-size: 13px; margin: 5px 0;">Target: ${opportunity.target}</p>
+                    <p style="color: var(--text-secondary); font-size: 13px; margin: 5px 0;">Risk Level: <span style="text-transform: uppercase;">${opportunity.risk}</span></p>
+                </div>
+            `;
+            tradeModal.classList.add('active');
+        }
+
+        cancelBtn.addEventListener('click', () => {
+            tradeModal.classList.remove('active');
+            document.getElementById('tradeAmount').value = '';
+            document.getElementById('termsCheck').checked = false;
+        });
+
+        executeBtn.addEventListener('click', () => {
+            const amount = document.getElementById('tradeAmount').value;
+            const termsChecked = document.getElementById('termsCheck').checked;
+
+            if (!amount || amount < 10) {
+                alert('Please enter a valid investment amount (minimum $10)');
+                return;
+            }
+
+            if (!termsChecked) {
+                alert('Please agree to the trading terms');
+                return;
+            }
+
+            executeBtn.innerHTML = '<span class="loading"></span> Executing...';
+            executeBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('Trade executed successfully!');
+                tradeModal.classList.remove('active');
+                executeBtn.innerHTML = 'Execute Trade';
+                executeBtn.disabled = false;
+                document.getElementById('tradeAmount').value = '';
+                document.getElementById('termsCheck').checked = false;
+                addTrade(state.selectedOpportunity, amount);
+            }, 1500);
+        });
+
+        function addTrade(opportunity, amount) {
+            const newTrade = {
+                id: state.trades.length + 1,
+                type: opportunity.pair,
+                amount: parseFloat(amount),
+                profit: 0,
+                status: 'active',
+                date: new Date().toISOString().split('T')[0]
+            };
+            state.trades.unshift(newTrade);
+            displayTrades();
+        }
+
+        // Trades Display
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.currentTab = btn.dataset.tab;
+                displayTrades();
+            });
+        });
+
+        function displayTrades() {
+            const tradesGrid = document.getElementById('tradesGrid');
+            const trades = state.currentTab === 'past' ? state.trades : state.predictedTrades;
+
+            if (state.currentTab === 'past') {
+                tradesGrid.innerHTML = trades.map(trade => `
+                    <div class="trade-card">
+                        <div class="trade-info">
+                            <h4>${trade.type}</h4>
+                            <p>Date: ${trade.date}</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 12px;">Amount</p>
+                            <p style="color: var(--text-primary); font-weight: 700;">$${trade.amount}</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 12px;">Profit</p>
+                            <p style="color: ${trade.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${trade.profit >= 0 ? '+' : ''}$${trade.profit}</p>
+                        </div>
+                        <div class="trade-status status-${trade.status}">${trade.status}</div>
+                    </div>
+                `).join('');
+            } else {
+                tradesGrid.innerHTML = trades.map(trade => `
+                    <div class="trade-card">
+                        <div class="trade-info">
+                            <h4>${trade.type}</h4>
+                            <p>Predicted Date: ${trade.date}</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 12px;">Predicted Profit</p>
+                            <p style="color: var(--success); font-weight: 700;">+${trade.predictedProfit}%</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 12px;">Confidence</p>
+                            <p style="color: var(--accent-gold); font-weight: 700;">${trade.confidence}%</p>
+                        </div>
+                        <div class="trade-status status-predicted">Predicted</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // AI Chat
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function addChatMessage(content, isUser = false) {
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user' : ''}`;
+            message.innerHTML = `
+                <div class="message-avatar">${isUser ? 'U' : 'TD'}</div>
+                <div class="message-content">${content}</div>
+            `;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addChatMessage(message, true);
+            chatInput.value = '';
+
+            setTimeout(() => {
+                const responses = [
+                    "Based on current market analysis, I recommend focusing on strong support levels.",
+                    "The crypto market is showing bullish momentum. Consider BTC and ETH positions.",
+                    "Risk management is crucial. Always use stop-loss orders to protect your capital.",
+                    "Technical indicators suggest a potential breakout in the next 24-48 hours.",
+                    "Remember to diversify your portfolio across different asset classes."
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                addChatMessage(response);
+            }, 1000);
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Settings Toggle Switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        // Wallet Form Handlers
+        function handleDeposit(e) {
+            e.preventDefault();
+            alert('Deposit request submitted! Processing time: 1-3 business days.');
+            e.target.reset();
+        }
+
+        function handleWithdraw(e) {
+            e.preventDefault();
+            alert('Withdrawal request submitted! Processing time: 2-5 business days.');
+            e.target.reset();
+        }
+
+        function handleTransfer(e) {
+            e.preventDefault();
+            alert('Internal transfer completed successfully!');
+            e.target.reset();
+        }
+
+        function handleConvert(e) {
+            e.preventDefault();
+            alert('Asset conversion executed successfully!');
+            e.target.reset();
+        }
+
+        function handleAddWallet(e) {
+            e.preventDefault();
+            alert('External wallet connected successfully!');
+            e.target.reset();
+        }
+
+        // Exchange Rate Calculator
+        const convertAmount = document.getElementById('convertAmount');
+        const convertFrom = document.getElementById('convertFrom');
+        const convertTo = document.getElementById('convertTo');
+        const exchangeRate = document.getElementById('exchangeRate');
+        const convertResult = document.getElementById('convertResult');
+
+        const rates = {
+            'USD': 1,
+            'EUR': 0.92,
+            'BTC': 0.0000156,
+            'ETH': 0.00032,
+            'GBP': 0.79
+        };
+
+        function updateConversion() {
+            if (!convertAmount || !convertFrom || !convertTo) return;
+            
+            const amount = parseFloat(convertAmount.value) || 0;
+            const from = convertFrom.value.split(' - ')[0];
+            const to = convertTo.value.split(' - ')[0];
+            
+            const fromRate = rates[from] || 1;
+            const toRate = rates[to] || 1;
+            const rate = toRate / fromRate;
+            const result = amount * rate;
+            
+            if (exchangeRate) exchangeRate.textContent = rate.toFixed(8);
+            if (convertResult) convertResult.textContent = result.toFixed(8);
+        }
+
+        if (convertAmount) {
+            convertAmount.addEventListener('input', updateConversion);
+            convertFrom.addEventListener('change', updateConversion);
+            convertTo.addEventListener('change', updateConversion);
+        }
+
+         // Panel Management
+        function openPanel(type) {
+            closePanels();
+            state.currentPanel = type;
+            const overlay = document.querySelector('.panel-overlay');
+            overlay.classList.add('active');
+            
+            if (type === 'notification') {
+                document.getElementById('notificationPanel').classList.add('active');
+                renderAlerts();
+            } else if (type === 'support') {
+                document.getElementById('supportPanel').classList.add('active');
+                renderTickets();
+            }
+        }
+
+        function closePanels() {
+            document.querySelectorAll('.side-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelector('.panel-overlay').classList.remove('active');
+            state.currentPanel = null;
+        }
+
+        // Notifications
+        function switchNotifTab(tab) {
+            document.querySelectorAll('#notificationPanel .panel-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('alertsTab').style.display = tab === 'alerts' ? 'block' : 'none';
+            document.getElementById('newsTab').style.display = tab === 'news' ? 'block' : 'none';
+            if (tab === 'alerts') renderAlerts();
+            else renderNews();
+        }
+
+        function renderAlerts() {
+            const html = state.notifications.map(n => `
+                <div class="panel-item">
+                    <div class="panel-icon"><i class="fas ${n.icon}"></i></div>
+                    <div class="panel-text">
+                        <h4>${n.title}</h4>
+                        <p>${n.text}</p>
+                        <p style="font-size: 10px; color: rgba(176, 176, 176, 0.7); margin-top: 4px;">${n.time}</p>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('alertsTab').innerHTML = html;
+        }
+
+        function renderNews() {
+            const html = state.newsItems.map(n => `
+                <div class="panel-item">
+                    <div class="panel-icon"><i class="fas fa-newspaper"></i></div>
+                    <div class="panel-text">
+                        <h4>${n.title}</h4>
+                        <p>${n.text}</p>
+                        <p style="font-size: 10px; color: rgba(176, 176, 176, 0.7); margin-top: 4px;">${n.time}</p>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('newsTab').innerHTML = html;
+        }
+        
+         // Support System
+        function switchSupportTab(tab) {
+            document.querySelectorAll('#supportPanel .panel-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('chatTab').style.display = tab === 'chat' ? 'block' : 'none';
+            document.getElementById('ticketsTab').style.display = tab === 'tickets' ? 'block' : 'none';
+            if (tab === 'tickets') renderTickets();
+        }
+
+        function sendSupportMsg() {
+            const input = document.getElementById('supportInput');
+            if (!input.value.trim()) return;
+            
+            const chat = document.getElementById('supportChat');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.innerHTML = `
+                <div class="message-avatar">U</div>
+                <div class="message-content" style="max-width: 100%;">${input.value}</div>
+            `;
+            chat.appendChild(msgDiv);
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+            
+            setTimeout(() => {
+                const replyDiv = document.createElement('div');
+                replyDiv.className = 'message';
+                replyDiv.innerHTML = `
+                    <div class="message-avatar">TD</div>
+                    <div class="message-content" style="max-width: 100%;">Thanks for your message. An agent will respond shortly.</div>
+                `;
+                chat.appendChild(replyDiv);
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+
+        // Ticket System
+        function renderTickets() {
+            const html = state.tickets.map(t => `
+                <div class="ticket-card" onclick="openTicket('${t.id}')">
+                    <div class="ticket-header">
+                        <div class="ticket-id">${t.id}</div>
+                        <div class="ticket-status ${t.status}">${t.status.toUpperCase()}</div>
+                    </div>
+                    <div class="ticket-message">${t.subject}</div>
+                    <div class="ticket-date">${t.date}</div>
+                </div>
+            `).join('');
+            document.getElementById('ticketCards').innerHTML = html;
+            
+            const createBtn = document.getElementById('createTicketBtn');
+            if (state.tickets.length >= 32) {
+                createBtn.disabled = true;
+                createBtn.innerHTML = '<i class="fas fa-ban"></i> Max Tickets Reached';
+            } else {
+                createBtn.disabled = false;
+                createBtn.innerHTML = '<i class="fas fa-plus"></i> Create New Ticket';
+            }
+        }
+
+        function showCreateTicket() {
+            if (state.tickets.length >= 32) {
+                alert('Maximum ticket limit reached (32 tickets). Please close some existing tickets.');
+                return;
+            }
+            document.getElementById('createTicketForm').style.display = 'block';
+            document.getElementById('ticketsListView').style.display = 'none';
+        }
+
+        function hideCreateTicket() {
+            document.getElementById('createTicketForm').style.display = 'none';
+            document.getElementById('ticketsListView').style.display = 'block';
+            document.getElementById('ticketSubject').value = '';
+            document.getElementById('ticketMessage').value = '';
+        }
+
+        function submitTicket() {
+            const subject = document.getElementById('ticketSubject').value;
+            const message = document.getElementById('ticketMessage').value;
+            const priority = document.getElementById('ticketPriority').value;
+            
+            if (!subject || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const newTicket = {
+                id: `#TK-${2500 + state.tickets.length + 1}`,
+                status: 'open',
+                subject: subject,
+                message: message,
+                date: 'Today',
+                replies: []
+            };
+            
+            state.tickets.unshift(newTicket);
+            hideCreateTicket();
+            renderTickets();
+            alert('Ticket created successfully!');
+        }
+
+        function openTicket(ticketId) {
+            const ticket = state.tickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+            
+            state.currentTicket = ticket;
+            document.getElementById('ticketsList').style.display = 'none';
+            document.getElementById('ticketView').classList.add('active');
+            
+            document.getElementById('ticketViewContent').innerHTML = `
+                <div class="ticket-card" style="cursor: default;">
+                    <div class="ticket-header">
+                        <div class="ticket-id">${ticket.id}</div>
+                        <div class="ticket-status ${ticket.status}">${ticket.status.toUpperCase()}</div>
+                    </div>
+                    <h4 style="color: var(--accent-gold); margin: 10px 0;">${ticket.subject}</h4>
+                    <div class="ticket-message">${ticket.message}</div>
+                    <div class="ticket-date">${ticket.date}</div>
+                </div>
+            `;
+            
+            const chatHtml = `
+                <div class="message">
+                    <div class="message-avatar">U</div>
+                    <div class="message-content" style="max-width: 100%;">${ticket.message}</div>
+                </div>
+            `;
+            document.getElementById('ticketChatMessages').innerHTML = chatHtml;
+        }
+
+        function closeTicketView() {
+            document.getElementById('ticketView').classList.remove('active');
+            document.getElementById('ticketsList').style.display = 'block';
+            state.currentTicket = null;
+        }
+
+        function sendTicketReply() {
+            const input = document.getElementById('ticketReplyInput');
+            if (!input.value.trim()) return;
+            
+            const chat = document.getElementById('ticketChatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.innerHTML = `
+                <div class="message-avatar">U</div>
+                <div class="message-content" style="max-width: 100%;">${input.value}</div>
+            `;
+            chat.appendChild(msgDiv);
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // Market Selection
+        document.querySelectorAll('.market-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.currentMarket = btn.dataset.market;
+            });
+        });
+
+
+        // Initialize
+        initNavigation();
+        initChart();
+        renderTickets();
+        displayTrades();
+
+        console.log('Trade Demon Platform Loaded Successfully!');
+    </script>
+</body>
+</html>
