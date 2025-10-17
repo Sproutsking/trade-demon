@@ -1738,6 +1738,13 @@
             .settings-group {
                 padding: 8px;
             }
+            .opp-content-details {
+                 display: flex;
+                 flex-direction: column;
+            }
+            .opp-content-detail {
+                 padding: 4px 10px;
+                        font-size: 10px;
         }
 
         .loading {
