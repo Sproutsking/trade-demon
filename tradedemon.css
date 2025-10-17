@@ -456,7 +456,6 @@
         }
 
         .risk-low {
-            padding: 8px;
             border: 1px solid green;
             background: rgba(16, 185, 129, 0.2); 
             color: var(--success);
@@ -466,7 +465,6 @@
             justify-content: center;
         }
         .risk-medium {
-            padding: 8px;
             border: 1px solid #8b6f47;
             background: rgba(245, 158, 11, 0.2);
             color: var(--warning);
@@ -476,7 +474,6 @@
             justify-content: center;
         }
         .risk-high {
-            padding: 8px;
             border: 1px solid red;
             background: rgba(239, 68, 68, 0.2);
             color: var(--danger);
@@ -1750,6 +1747,7 @@
                  padding: 6px 10px;
             }
             ..risk-badge {
+                 padding: 5px 10px;
                  font-size: 8px;
             }
         }
