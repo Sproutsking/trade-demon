@@ -1737,6 +1737,7 @@
             }
             .opp-content-details {
                  display: flex;
+                 gap: 3px;
                  flex-direction: column;
             }
             .opp-content-detail {
@@ -1751,8 +1752,8 @@
                  font-size: 8px;
             }
             .risk-high, .risk-medium, .risk-low {
-                 padding: 5px;
-                 font-size: 7px;
+                 padding: 6px;
+                 font-size: 8px;
             }
         }
 
