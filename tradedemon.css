@@ -1750,6 +1750,10 @@
                  padding: 5px 10px;
                  font-size: 8px;
             }
+            .risk-high, .risk-medium, .risk-low {
+                 padding: 5px;
+                 font-size: 7px;
+            }
         }
 
         .loading {
