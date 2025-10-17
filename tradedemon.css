@@ -449,7 +449,7 @@
         .risk-badge {
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             white-space: nowrap;
@@ -1748,6 +1748,10 @@
             }
             .opportunity-card {
                  padding: 6px 10px;
+            }
+            ..risk-badge {
+                 font-size: 8px;
+            }
         }
 
         .loading {
